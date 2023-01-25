@@ -1,0 +1,75 @@
+[
+    {
+        "numero":1,
+        "nombre_pregunta":"¿Como se llamaba el pan que caía del cielo?",
+        "respuesta":"maná",
+        "opciones":["pan de vida", "maná"]
+    },
+    {
+        "numero":2,
+        "nombre_pregunta":"¿Cuantos días a la semana debían recoger el maná los israelitas?",
+        "respuesta":"6",
+        "opciones":["6", "8"]
+    },
+    {
+        "numero":3,
+        "nombre_pregunta":"¿Que día de la semana NO debían salir a recoger el maná?",
+        "respuesta":"Sábado",
+        "opciones":["Viernes", "Sábado"]
+    },
+    {
+        "numero":4,
+        "nombre_pregunta":"¿Que pasaba con el pan al día siguiente si no se lo comían?",
+        "respuesta":"se agusanaba",
+        "opciones":["se agusanaba", "olia feo"]
+    },
+    {
+        "numero":5,
+        "nombre_pregunta":"¿Que día no se echaba a perder el pan?",
+        "respuesta":"El sábado",
+        "opciones":["El sábado", "El domingo"]
+    },
+    {
+        "numero":6,
+        "nombre_pregunta":"¿Que pasaba con el pan después que el sol calentaba?",
+        "respuesta":"se derretía",
+        "opciones":["se derretía", "se podia cocinar"]
+    },
+    {
+        "numero":7,
+        "nombre_pregunta":"¿Que día de la semana podían recoger doble porción de Maná?",
+        "respuesta":"El viernes",
+        "opciones":["El domingo", "El viernes"]
+    },
+    {
+        "numero":8,
+        "nombre_pregunta":"¿Cuantos años los israelitas comieron maná en el desierto?",
+        "respuesta":"40 años",
+        "opciones":["40 años", "30 años"]
+    },
+    {
+        "numero":9,
+        "nombre_pregunta":"¿En donde mandó Dios a guardar un vaso de maná?",
+        "respuesta":"En el arca del pacto",
+        "opciones":["En una cesta", "En el arca del pacto"]
+    },
+    {
+        "numero":10,
+        "nombre_pregunta":"¿Cuantos mandamientos les dio Dios a Moisés en el monte de Sinaí?",
+        "respuesta":"10",
+        "opciones":["10", "12"]
+    },
+    {
+        "numero":11,
+        "nombre_pregunta":"¿cual es el último mandamiento?",
+        "respuesta":"No codiciarás",
+        "opciones":["No codiciarás", "maná"]
+    },
+    {
+        "numero":12,
+        "nombre_pregunta":"¿Cual es el tercer mandamiento?",
+        "respuesta":"No tomarás el nombre de Jehová en vano",
+        "opciones":["pan de vida", "No tomarás el nombre de Jehová en vano"]
+    }
+
+]

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sorteo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="css/estilo2.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.3.0/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="index.css">
+    <script src="base-de.preguntas.js"></script>
+
+
+    <!-- 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+     -->
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row justify-content-around">
+            <div class="col-md-6">
+                <div class="contenedor">
+                    <h1 class="text-dark">Ruleta de preguntas</h1>
+                    <div class="concursantes">
+                        <canvas id="idcanvas" width="600" height="600"></canvas>
+                        <br>
+                        <button onclick="sortear()"><span id="idestado">Comenzar a jugar!!</span></button>
+                        <div class="mark-winner"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="contenedor">
+                    <h1 class="text-dark">Preguntas</h1>
+                    <div id="listado_preguntas"></div>
+                    <div class="row justify-content-around">
+                        <div class="col-md-3"><button class="btn btn-secondary btn-lg" onclick="paginacion('atras')">&lt;</button></div>
+                        <div class="col-md-3"><button class="btn btn-secondary btn-lg" onclick="paginacion('siguiente')">&gt;</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="myModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="titulo-pregunta">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="pregunta"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        let page = 1;
+        const path = window.location.origin;
+        fetch('preguntas.json')
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+
+                let array_concursantes = [];
+                data.forEach(element => {
+                    array_concursantes.push(`pregunta ${element['numero']}`)
+                });
+                enlistar_preguntas(data)
+
+
+
+                // const array_concursantes=
+                // [
+                // 	//'kamila Villablanca'-GANADORA
+                // 	'Daniela Salvador Caballero'
+                // 	,'LeoGarcia01'
+                // 	,'Gaspak'
+                // 	,'Oxmar Yamith'
+                // 	,'Mauro Toranzo'
+                // 	,'Gerardo Garcia Hernandez'
+                // 	,'Pierre Zurita Ramirez'
+                // 	,'Pierre Zurita Ramirez'
+                // 	,'Daniela Salvador Caballero'
+                // 	,'samp play'
+                // 	,'Eduardo Joel Paucarpura Sanchez'
+                // 	,'Anthony Espino'
+                // 	,'Jordan Team'
+                // 	,'Gerardo Garcia Hernandez'
+                // 	,'Anthony Espino'
+                // 	,'Oxmar Yamith'
+                // 	,'Oxmar Yamith'
+                // 	,'Oxmar Yamith'
+                // 	,'Oxmar Yamith'
+                // 	,'Oxmar Yamith'
+                // 	,'Gerardo Garcia Hernandez'
+                // 	,'TheComicalCanadian'
+                // ];
+
+                let canvas = document.getElementById("idcanvas");
+                let context = canvas.getContext("2d");
+                let center = canvas.width / 2;
+
+                context.beginPath();
+                context.moveTo(center, center);
+                context.arc(center, center, center, 0, 2 * Math.PI);
+                context.lineTo(center, center);
+                context.fillStyle = '#33333333';
+                context.fill();
+
+                context.beginPath();
+                context.moveTo(center, center);
+                context.arc(center, center, center - 10, 0, 2 * Math.PI);
+                context.lineTo(center, center);
+                context.fillStyle = 'black';
+                context.fill();
+
+                for (var i = 0; i < array_concursantes.length; i++) {
+                    context.beginPath();
+                    context.moveTo(center, center);
+                    context.arc(center, center, center - 20, i * 2 * Math.PI / array_concursantes.length, (i + 1) * 2 * Math.PI / array_concursantes.length);
+                    context.lineTo(center, center);
+                    context.fillStyle = random_color();
+                    context.fill();
+
+                    context.save();
+                    context.translate(center, center);
+                    context.rotate(3 * 2 * Math.PI / (5 * array_concursantes.length) + i * 2 * Math.PI / array_concursantes.length);
+                    context.translate(-center, -center);
+                    context.font = "24px Comic Sans MS";
+                    context.textAlign = "right";
+                    context.fillStyle = "white";
+                    context.fillText(array_concursantes[i], canvas.width - 30, center);
+                    context.restore();
+                }
+
+
+            });
+        let pos_ini = 0;
+        let clic = 0;
+        let movement;
+        function sortear() {
+            if (clic == 0) {
+                let canvas = document.getElementById("idcanvas");
+                movement = setInterval(function () {
+                    pos_ini += 10;
+                    canvas.style.transform = 'rotate(' + pos_ini + 'deg)';
+                }, 10);
+                clic = 1;
+                document.getElementById("idestado").innerHTML = "Detener";
+            } else {
+                clearInterval(movement);
+                clic = 0;
+                document.getElementById("idestado").innerHTML = "Comenzar a jugar!!";
+            }
+        }
+
+
+
+        function random_color() {
+            let ar_digit = ['2', '3', '4', '5', '6', '7', '8', '9'];
+            let color = '';
+            let i = 0;
+            while (i < 6) {
+                let pos = Math.round(Math.random() * (ar_digit.length - 1));
+                color = color + '' + ar_digit[pos];
+                i++;
+            }
+            return '#' + color;
+        }
+
+        const enlistar_preguntas = (preguntas) => {
+            const lista = document.querySelector('#listado_preguntas');
+
+            let html = '<div class="row">';
+            let count = 0
+            preguntas.forEach(element => {
+                html += `<div class="col-md-2">
+                        <button type="button" id="boton-${element['numero']}" class="btn btn-primary btn-lg" onclick="abrir_pregunta(${element['numero']})">${element['numero']}</button></div>`
+            });
+            html += '</div>';
+
+            console.log(html)
+            lista.innerHTML = html;
+        }
+
+
+        const abrir_pregunta = (numero) => {
+            document.querySelector(`#boton-${numero}`).classList.replace('btn-primary','btn-success')
+            fetch('preguntas.json')
+                .then((response) => response.json())
+                .then((data) => {
+                    let pregunta_obj = {}
+                    data.forEach(element => {
+                        if (element['numero'] === numero) {
+                            pregunta_obj = element;
+                        }
+                    });
+                    const modal_titulo = document.querySelector('#titulo-pregunta');
+                    modal_titulo.innerHTML = `Pregunta ${numero}`
+
+                    let html = `<div id="tablero-de-juego text-center">
+                                <div id="encabezado text-center">
+                                    <h2 id="pregunta">${pregunta_obj['nombre_pregunta']}</h2>
+                                    <br>
+                                </div>`;
+                    pregunta_obj['opciones'].forEach(element => {
+                        html += ` <div class="opcion" id="opcion-${element}" onclick="seleccionarOpción(${numero},'${element}')">
+                                     ${element}
+                             </div>`
+                    });
+                    html += `</div>`
+                    const modal = document.querySelector('#pregunta');
+                    modal.innerHTML = html;
+                    let myModal = new bootstrap.Modal(document.getElementById('myModal'))
+                    myModal.show()
+
+                });
+        }
+
+        async function seleccionarOpción(numero, respuesta) {
+            fetch('preguntas.json')
+                .then((response) => response.json())
+                .then(async (data) => {
+                    let validezRespuesta = false
+                    let respuesta_correcta = ''
+                    data.forEach(element => {
+                        if (element['numero'] === numero) {
+                            if(element['respuesta']== respuesta) {
+                                validezRespuesta = true;
+                            }
+                            respuesta_correcta = element['respuesta']
+                        }
+                    });
+                    if (validezRespuesta) {
+                        await Swal.fire({
+                            title: "Respuesta correcta",
+                            text: "La respuesta ha sido correcta",
+                            icon: "success",
+                        });
+                        puntaje++;
+                    } else {
+                        await Swal.fire({
+                            title: "Respuesta Incorrecta",
+                            html: `La respuesta correcta es <strong>${respuesta_correcta}</strong>`,
+                            icon: "error",
+                        });
+                    }
+                    var myModalEl = document.getElementById('staticBackdrop');
+                                var modal = bootstrap.Modal.getInstance(myModalEl)
+                                modal.hide();
+                });
+               
+        }
+        const paginacion = (movimiento) =>{
+            if(movimiento == "atras"){
+                if(page > 1){
+                    page --;
+                }
+            }
+            if(movimiento == "siguiente"){
+                if(page < 3){
+                    page ++;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
